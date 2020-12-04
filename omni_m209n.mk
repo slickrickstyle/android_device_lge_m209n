@@ -1,11 +1,13 @@
 #
-# Copyright (C) 2017 The Android Open-Source Project
+# Copyright (C) 2020 The Android Open Source Project
+# Copyright (C) 2020 The TWRP Open Source Project
+#
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-# http://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,25 +16,22 @@
 # limitations under the License.
 #
 
-LOCAL_PATH := device/lge/m209n
-
-ifeq ($(TARGET_PREBUILT_KERNEL),)
-	LOCAL_KERNEL := $(LOCAL_PATH)/kernel
-else
-	LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
-endif
-
+# Inherit from those products. Most specific first.
+$(call inherit-product-if-exists, $(SRC_TARGET_DIR)/product/embedded.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
-$(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
-$(call inherit-product, vendor/omni/config/common.mk)
-$(call inherit-product, device/lge/m209n/device.mk)
-$(call inherit-product, device/qcom/common/Android.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
+# Inherit from m209n device
+$(call inherit-product, device/lge/m209n/device.mk)
+
+# Inherit some common Omni stuff.
+$(call inherit-product, vendor/omni/config/common.mk)
+$(call inherit-product, vendor/omni/config/gsm.mk)
 
 # Device identifier. This must come after all inclusions
-PRODUCT_NAME := omni_m209n
 PRODUCT_DEVICE := m209n
+PRODUCT_NAME := omni_m209n
 PRODUCT_BRAND := MetroPCS
 PRODUCT_MODEL := LGMS428
-PRODUCT_MANUFACTURER := LGE
-PRODUCT_LOCALES := en_US
+PRODUCT_MANUFACTURER := lge
+PRODUCT_RELEASE_NAME := MetroPCS LGMS428
